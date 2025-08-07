@@ -22,3 +22,10 @@ export const transactions: Transaction[] = [
   { id: '8', date: '2023-10-08', remark: 'Car Payment', amount: -400, currency: 'USD', type: 'Debit' },
   { id: '9', date: '2023-10-09', remark: 'Insurance', amount: -200, currency: 'USD', type: 'Debit' },
 ];
+
+export const navLinks = [
+  { name: 'Dashboard', href: '/dashboard' },
+  { name: 'Transactions', href: '/transactions' },
+  { name: 'Reports', href: '/reports' },
+  { name: 'Settings', href: '/settings' },
+];

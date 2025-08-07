@@ -15,7 +15,7 @@ type HeaderProps = {
 
 const Header = ({ onToggleSidebar }: HeaderProps) => {
   return (
-    <header className="w-full flex items-center justify-between px-4 md:px-6 py-4 bg-white shadow-md">
+    <header className="w-full flex items-center justify-between px-4 md:px-6 py-4 bg-white">
       <div className="flex items-center gap-4">
         <button
           onClick={onToggleSidebar}

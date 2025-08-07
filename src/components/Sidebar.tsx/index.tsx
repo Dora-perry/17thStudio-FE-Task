@@ -3,18 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-
-const navLinks = [
-  { name: 'Dashboard', href: '/dashboard' },
-  { name: 'Transactions', href: '/transactions' },
-  { name: 'Reports', href: '/reports' },
-  { name: 'Settings', href: '/settings' },
-];
-
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+import { SidebarProps } from '@/interfaces';
+import { navLinks } from '@/constants/data';
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const pathname = usePathname();
@@ -31,7 +21,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               className={clsx(
                 'block px-4 py-2 rounded-full transition-colors',
                 pathname === href
-                  ? 'bg-gray-100 text-black'
+                  ? 'bg-gray-100 text-[#437D8E]'
                   : 'text-gray-700 hover:bg-gray-300 hover:text-[#437D8E]'
               )}
             >
@@ -41,7 +31,6 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         </nav>
       </aside>
 
-      {/* Mobile sidebar overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden">
           <div className="w-64 bg-white p-6 shadow-lg">
@@ -62,14 +51,13 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                       ? 'bg-gray-100 text-black'
                       : 'text-gray-700 hover:bg-gray-300 hover:text-[#437D8E]'
                   )}
-                  onClick={onClose} // close sidebar on navigation
+                  onClick={onClose}
                 >
                   {name}
                 </Link>
               ))}
             </nav>
           </div>
-          {/* Overlay */}
           <div
             className="flex-1 bg-black bg-opacity-40"
             onClick={onClose}
