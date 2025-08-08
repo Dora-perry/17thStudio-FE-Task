@@ -17,3 +17,6 @@ export interface DashboardSummary {
   debitsChange: number;
   transactionChange: number;
 }
+
+export type SortKey = 'date' | 'remark' | 'amount' | 'currency' | 'type';
+export type SortOrder = 'asc' | 'desc';

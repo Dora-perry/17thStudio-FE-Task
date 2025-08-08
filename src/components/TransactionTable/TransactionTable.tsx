@@ -1,19 +1,75 @@
+'use client';
+
 import Image from 'next/image';
 import { Badge } from '../ui/badge';
 import { TransactionTableProps } from '@/interfaces';
+import { useState, useMemo } from 'react';
+import { SortKey, SortOrder } from '@/types';
 
 export default function TransactionTable({ data, isLoading = false }: TransactionTableProps) {
   const skeletonRows = new Array(5).fill(null);
+  const [sortKey, setSortKey] = useState<SortKey>('date');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      setSortOrder('asc');
+    }
+  };
+
+  const sortedData = useMemo(() => {
+    if (!data) return [];
+
+    return [...data].sort((a, b) => {
+      const aValue = a[sortKey];
+      const bValue = b[sortKey];
+
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortOrder === 'asc'
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+
+      if (sortKey === 'date') {
+        return sortOrder === 'asc'
+          ? new Date(aValue).getTime() - new Date(bValue).getTime()
+          : new Date(bValue).getTime() - new Date(aValue).getTime();
+      }
+
+      return 0;
+    });
+  }, [data, sortKey, sortOrder]);
+
+  const headings: { label: string; key: SortKey }[] = [
+    { label: 'Date', key: 'date' },
+    { label: 'Remark', key: 'remark' },
+    { label: 'Amount', key: 'amount' },
+    { label: 'Currency', key: 'currency' },
+    { label: 'Type', key: 'type' },
+  ];
 
   return (
     <table className="w-full table-fixed mt-6 text-sm bg-white overflow-x-hidden">
       <thead>
         <tr className="text-gray-500 text-[13px]">
-          {['Date', 'Remark', 'Amount', 'Currency', 'Type'].map((heading) => (
-            <th key={heading} className="p-3 text-left">
+          {headings.map(({ label, key }) => (
+            <th key={key} className="p-3 text-left cursor-pointer" onClick={() => handleSort(key)}>
               <div className="flex items-center gap-1 border-b w-full border-gray-200 pb-0.5">
-                <span>{heading}</span>
-                <Image src="/images/triangle.svg" alt="Sort" width={10} height={5} />
+                <span>{label}</span>
+                <Image
+                  src="/images/triangle.svg"
+                  alt="Sort"
+                  width={10}
+                  height={5}
+                  className={`${sortKey === key && sortOrder === 'desc' ? 'rotate-180' : ''}`}
+                />
               </div>
             </th>
           ))}
@@ -33,7 +89,7 @@ export default function TransactionTable({ data, isLoading = false }: Transactio
                   ))}
               </tr>
             ))
-          : data.map((tx, index) => (
+          : sortedData.map((tx, index) => (
               <tr key={tx.id}>
                 <td className="p-3">
                   <span className="inline-block w-full border-b border-gray-200 pb-0.5">{tx.date}</span>

@@ -5,6 +5,7 @@ import WalletLedgerHeader from '@/components/WalletLedgerHeader/WalletLedgerHead
 import { transactions, summaryData } from '@/constants/data';
 import TransactionTable from './TransactionTable';
 import SummaryCard from '../SummaryCards/SummaryCard';
+import TransactionsTab from './TransactionTableTab';
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'transactions'>('overview');
@@ -25,8 +26,8 @@ export default function DashboardPage() {
           <button
             onClick={() => setActiveTab('overview')}
             className={`pb-2 text-base font-medium ${activeTab === 'overview'
-                ? 'border-b-2 border-[#437D8E] text-[#437D8E]'
-                : 'text-gray-400'
+              ? 'border-b-2 border-[#437D8E] text-[#437D8E]'
+              : 'text-gray-400'
               }`}
           >
             Overview
@@ -34,8 +35,8 @@ export default function DashboardPage() {
           <button
             onClick={() => setActiveTab('transactions')}
             className={`pb-2 text-sm font-medium ${activeTab === 'transactions'
-                ? 'border-b-2 border-[#437D8E] text-[#437D8E]'
-                : 'text-gray-400'
+              ? 'border-b-2 border-[#437D8E] text-[#437D8E]'
+              : 'text-gray-400'
               }`}
           >
             Transactions
@@ -80,17 +81,9 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {activeTab === 'transactions' && (
-          <div className="flex flex-col items-center justify-center h-64 text-center text-gray-400">
-            <p className="text-base mb-2">Transaction UI not yet available.</p>
-            <button
-              onClick={() => setActiveTab('overview')}
-              className="px-4 py-2 text-white bg-[#437D8E] rounded-md"
-            >
-              Go back to Overview
-            </button>
-          </div>
-        )}
+        {activeTab === 'transactions' && <TransactionsTab isLoading={isLoading} />}
+
+
       </section>
     </main>
   );
